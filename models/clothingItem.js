@@ -10,7 +10,8 @@ const clothingSchema = new mongoose.Schema({
   },
   weather: {
     type: String,
-    required: true
+    required: true,
+    enum: ['hot', 'warm', 'cold'],
   },
   imageUrl: {
     type: String,
@@ -37,4 +38,4 @@ const clothingSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('items', clothingSchema);
+module.exports = mongoose.model('clothingItem', clothingSchema);

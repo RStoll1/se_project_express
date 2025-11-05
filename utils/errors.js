@@ -5,6 +5,7 @@ const ERR_USER_NOT_FOUND = 'User not found';
 const ERR_INVALID_ID = 'Invalid id';
 const ERR_NOT_AUTHORIZED = 'Not authorized to delete this item';
 const ERR_DELETED = 'Item deleted successfully';
+const ERR_RESOURCE_NOT_FOUND = 'Requested resource not found';
 
 function handleError(res, err) {
   if (err.name === 'CastError') {
@@ -27,5 +28,6 @@ module.exports = {
   ERR_INVALID_ID,
   ERR_NOT_AUTHORIZED,
   ERR_DELETED,
+  ERR_RESOURCE_NOT_FOUND,
   handleError,
 };

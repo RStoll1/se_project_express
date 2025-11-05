@@ -23,7 +23,7 @@ const getUser = (req, res) => {
     .orFail()
     .then((user) => res.status(200).send(user))
     .catch((err) => errors.handleError(res, err));
-}
+};
 
 module.exports = {
   getUsers,

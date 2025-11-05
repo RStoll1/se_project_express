@@ -6,13 +6,13 @@ const createItem = (req, res) => {
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => res.status(201).send(item))
     .catch((err) => errors.handleError(res, err));
-}
+};
 
 const getItems = (req, res) => {
   ClothingItem.find({}).then((items) =>
     res.status(200).send(items))
     .catch((err) => errors.handleError(res, err));
-}
+};
 
 const updateItem = (req, res) => {
   const { itemId } = req.params;
@@ -21,7 +21,7 @@ const updateItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } }).orFail()
     .then((item) => res.status(200).send(item))
     .catch((err) => errors.handleError(res, err));
-}
+};
 
 const likeItem = (req, res) => {
   const { itemId } = req.params;
@@ -33,7 +33,7 @@ const likeItem = (req, res) => {
   ).orFail()
     .then((item) => res.status(200).send(item))
     .catch((err) => errors.handleError(res, err));
-}
+};
 
 const dislikeItem = (req, res) => {
   const { itemId } = req.params;
@@ -45,7 +45,7 @@ const dislikeItem = (req, res) => {
   ).orFail()
     .then((item) => res.status(200).send(item))
     .catch((err) => errors.handleError(res, err));
-}
+};
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
@@ -58,14 +58,14 @@ const deleteItem = (req, res) => {
       return ClothingItem.findById(itemId)
         .then((found) => {
           if (!found) {
-            return errors.handleError(res, { name: 'DocumentNotFoundError' });
+            return res.status(404).send({ message: errors.ERR_NOT_FOUND });
           }
           return res.status(403).send({ message: errors.ERR_NOT_AUTHORIZED });
         })
         .catch((err) => errors.handleError(res, err));
     })
     .catch((err) => errors.handleError(res, err));
-}
+};
 
 module.exports = {
   createItem,

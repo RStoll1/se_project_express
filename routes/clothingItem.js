@@ -3,7 +3,6 @@ const { createItem, getItems, updateItem, likeItem, dislikeItem, deleteItem } = 
 
 router.post('/', createItem);
 router.get('/', getItems);
-router.put('/:itemId', updateItem);
 router.put('/:itemId/likes', likeItem);
 router.delete('/:itemId/likes', dislikeItem);
 router.delete('/:itemId', deleteItem);
