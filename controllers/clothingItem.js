@@ -50,7 +50,7 @@ const dislikeItem = (req, res) => {
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
-  ClothingItem.findByIdAndDelete({ _id: itemId, owner: req.user._id })
+  ClothingItem.findOneAndDelete({ _id: itemId, owner: req.user._id })
     .then((deleted) => {
       if (deleted) {
         return res.status(200).send({ message: errors.ERR_DELETED });
@@ -58,10 +58,11 @@ const deleteItem = (req, res) => {
       return ClothingItem.findById(itemId)
         .then((found) => {
           if (!found) {
-            return errors.handleError(res, { name: 'CastError' });
+            return errors.handleError(res, { name: 'DocumentNotFoundError' });
           }
-          return errors.handleError(res, { name: 'DocumentNotFoundError' });
-        });
+          return res.status(403).send({ message: errors.ERR_NOT_AUTHORIZED });
+        })
+        .catch((err) => errors.handleError(res, err));
     })
     .catch((err) => errors.handleError(res, err));
 }
