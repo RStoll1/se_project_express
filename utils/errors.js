@@ -1,3 +1,11 @@
+const ERR_VALIDATION = 'Validation failed';
+const ERR_INTERNAL = 'Internal server error';
+const ERR_NOT_FOUND = 'Item not found';
+const ERR_USER_NOT_FOUND = 'User not found';
+const ERR_INVALID_ID = 'Invalid id';
+const ERR_NOT_AUTHORIZED = 'Not authorized to delete this item';
+const ERR_DELETED = 'Item deleted successfully';
+
 function handleError(res, err) {
   if (err.name === 'CastError') {
     return res.status(400).send({ message: ERR_INVALID_ID });
@@ -10,14 +18,6 @@ function handleError(res, err) {
   }
   return res.status(500).send({ message: ERR_INTERNAL });
 }
-
-const ERR_VALIDATION = 'Validation failed';
-const ERR_INTERNAL = 'Internal server error';
-const ERR_NOT_FOUND = 'Item not found';
-const ERR_USER_NOT_FOUND = 'User not found';
-const ERR_INVALID_ID = 'Invalid id';
-const ERR_NOT_AUTHORIZED = 'Not authorized to delete this item';
-const ERR_DELETED = 'Item deleted successfully';
 
 module.exports = {
   ERR_VALIDATION,
