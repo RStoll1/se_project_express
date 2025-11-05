@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createItem, getItems, updateItem, likeItem, dislikeItem, deleteItem } = require('../controllers/clothingItem');
+const { createItem, getItems, likeItem, dislikeItem, deleteItem } = require('../controllers/clothingItem');
 
 router.post('/', createItem);
 router.get('/', getItems);
