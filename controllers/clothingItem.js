@@ -1,0 +1,76 @@
+const ClothingItem = require('../models/clothingItem')
+const errors = require('../utils/errors');
+
+const createItem = (req, res) => {
+  const { name, weather, imageUrl } = req.body;
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
+    .then((item) => res.status(201).send(item))
+    .catch((err) => errors.handleError(res, err));
+}
+
+const getItems = (req, res) => {
+  ClothingItem.find({}).then((items) =>
+    res.status(200).send(items))
+    .catch((err) => errors.handleError(res, err));
+}
+
+const updateItem = (req, res) => {
+  const { itemId } = req.params;
+  const { imageUrl } = req.body;
+
+  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } }).orFail()
+    .then((item) => res.status(200).send(item))
+    .catch((err) => errors.handleError(res, err));
+}
+
+const likeItem = (req, res) => {
+  const { itemId } = req.params;
+
+  ClothingItem.findByIdAndUpdate(
+    itemId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
+  ).orFail()
+    .then((item) => res.status(200).send(item))
+    .catch((err) => errors.handleError(res, err));
+}
+
+const dislikeItem = (req, res) => {
+  const { itemId } = req.params;
+
+  ClothingItem.findByIdAndUpdate(
+    itemId,
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  ).orFail()
+    .then((item) => res.status(200).send(item))
+    .catch((err) => errors.handleError(res, err));
+}
+
+const deleteItem = (req, res) => {
+  const { itemId } = req.params;
+
+  ClothingItem.findByIdAndDelete({ _id: itemId, owner: req.user._id })
+    .then((deleted) => {
+      if (deleted) {
+        return res.status(200).send({ message: errors.ERR_DELETED });
+      }
+      return ClothingItem.findById(itemId)
+        .then((found) => {
+          if (!found) {
+            return errors.handleError(res, { name: 'CastError' });
+          }
+          return errors.handleError(res, { name: 'DocumentNotFoundError' });
+        });
+    })
+    .catch((err) => errors.handleError(res, err));
+}
+
+module.exports = {
+  createItem,
+  getItems,
+  updateItem,
+  likeItem,
+  dislikeItem,
+  deleteItem
+};

@@ -1,3 +1,5 @@
+const _id = "";
+
 module.exports = {
   env: {
     es2021: true,
@@ -21,6 +23,8 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
+    "no-console": ["warn", { allow: ["error"] }],
+
   },
 
 };
