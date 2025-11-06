@@ -10,7 +10,7 @@ const createItem = (req, res) => {
 
 const getItems = (req, res) => {
   ClothingItem.find({}).then((items) =>
-    res.status(errors.STATUS_OK).send(items))
+    res.send(items))
     .catch((err) => errors.handleError(res, err));
 };
 
@@ -22,7 +22,7 @@ const likeItem = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   ).orFail()
-    .then((item) => res.status(errors.STATUS_OK).send(item))
+    .then((item) => res.send(item))
     .catch((err) => errors.handleError(res, err));
 };
 
@@ -34,7 +34,7 @@ const dislikeItem = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   ).orFail()
-    .then((item) => res.status(errors.STATUS_OK).send(item))
+    .then((item) => res.send(item))
     .catch((err) => errors.handleError(res, err));
 };
 
@@ -44,7 +44,7 @@ const deleteItem = (req, res) => {
   ClothingItem.findOneAndDelete({ _id: itemId, owner: req.user._id })
     .then((deleted) => {
       if (deleted) {
-        return res.status(errors.STATUS_OK).send({ message: errors.ERR_DELETED });
+        return res.send({ message: errors.ERR_DELETED });
       }
       return ClothingItem.findById(itemId)
         .then((found) => {

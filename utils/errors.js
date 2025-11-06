@@ -7,7 +7,6 @@ const ERR_NOT_AUTHORIZED = 'Not authorized to delete this item';
 const ERR_DELETED = 'Item deleted successfully';
 const ERR_RESOURCE_NOT_FOUND = 'Requested resource not found';
 
-const STATUS_OK = 200;
 const STATUS_CREATED = 201;
 const STATUS_BAD_REQUEST = 400;
 const STATUS_FORBIDDEN = 403;

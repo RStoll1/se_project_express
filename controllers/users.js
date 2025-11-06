@@ -5,7 +5,7 @@ const errors = require('../utils/errors');
 
 const getUsers = (req, res) => {
   User.find({}).then((users) =>
-    res.status(errors.STATUS_OK).send(users))
+    res.send(users))
     .catch((err) => errors.handleError(res, err));
 };
 
@@ -21,7 +21,7 @@ const getUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .orFail()
-    .then((user) => res.status(errors.STATUS_OK).send(user))
+    .then((user) => res.send(user))
     .catch((err) => errors.handleError(res, err));
 };
 
