@@ -4,10 +4,6 @@ const errors = require('../utils/errors');
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
 
-  if (!name || !weather || !imageUrl) {
-    return res.status(errors.STATUS_BAD_REQUEST).send({ message: errors.ERR_VALIDATION });
-  }
-
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => res.status(errors.STATUS_CREATED).send(item))
     .catch((err) => errors.handleError(res, err));
