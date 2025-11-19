@@ -15,6 +15,10 @@ const getUsers = (req, res) => {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(errors.STATUS_BAD_REQUEST).send({ message: errors.ERR_VALIDATION });
+  }
+
   User.findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
