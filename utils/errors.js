@@ -24,6 +24,12 @@ function handleError(res, err) {
   if (err.name === 'DocumentNotFoundError') {
     return res.status(STATUS_NOT_FOUND).send({ message: ERR_NOT_FOUND });
   }
+  if (err.message === ERR_USER_NOT_FOUND) {
+    return res.status(STATUS_NOT_FOUND).send({ message: ERR_USER_NOT_FOUND });
+  }
+  if (err.message === ERR_NOT_FOUND) {
+    return res.status(STATUS_NOT_FOUND).send({ message: ERR_NOT_FOUND });
+  }
   if (err.code === 11000 || (err.message && err.message.includes('duplicate key'))) {
     return res.status(STATUS_CONFLICT).send({ message: ERR_CONFLICT });
   }

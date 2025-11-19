@@ -22,7 +22,7 @@ const likeItem = (req, res) => {
     itemId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
-  ).orFail()
+  ).orFail(() => new Error(errors.ERR_NOT_FOUND))
     .then((item) => res.send(item))
     .catch((err) => errors.handleError(res, err));
 };
@@ -34,7 +34,7 @@ const dislikeItem = (req, res) => {
     itemId,
     { $pull: { likes: req.user._id } },
     { new: true },
-  ).orFail()
+  ).orFail(() => new Error(errors.ERR_NOT_FOUND))
     .then((item) => res.send(item))
     .catch((err) => errors.handleError(res, err));
 };

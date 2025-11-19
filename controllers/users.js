@@ -4,13 +4,6 @@ const { JWT_SECRET } = require('../utils/config');
 const User = require('../models/user');
 const errors = require('../utils/errors');
 
-// GET /users
-const getUsers = (req, res) => {
-  User.find({}).then((users) =>
-    res.send(users))
-    .catch((err) => errors.handleError(res, err));
-};
-
 // POST /users
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -38,7 +31,7 @@ const createUser = (req, res) => {
 // GET /users/me
 const getCurrentUser = (req, res) => {
   User.findById(req.user._id)
-    .orFail()
+    .orFail(() => new Error(errors.ERR_USER_NOT_FOUND))
     .then((user) => res.send(user))
     .catch((err) => errors.handleError(res, err));
 };
@@ -46,7 +39,8 @@ const getCurrentUser = (req, res) => {
 // PATCH /users/me
 const updateCurrentUser = (req, res) => {
   const { name, avatar } = req.body;
-  return User.findByIdAndUpdate(req.user._id, { name, avatar }, { new: true })
+  return User.findByIdAndUpdate(req.user._id, { name, avatar }, { new: true, runValidators: true })
+    .orFail(() => new Error(errors.ERR_USER_NOT_FOUND))
     .then((user) => res.send(user))
     .catch((err) => errors.handleError(res, err));
 };
@@ -70,7 +64,6 @@ const login = (req, res) => {
 };
 
 module.exports = {
-  getUsers,
   createUser,
   getCurrentUser,
   updateCurrentUser,
