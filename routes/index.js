@@ -8,7 +8,6 @@ const { getItems } = require('../controllers/clothingItem');
 // Public
 router.post('/signin', login);
 router.post('/signup', createUser);
-router.post('/users', createUser);
 router.get('/items', getItems);
 
 // Private

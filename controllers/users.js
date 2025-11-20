@@ -7,8 +7,10 @@ const errors = require('../utils/errors');
 // POST /users
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-
-  User.findOne({ email })
+  if (!email) {
+    return res.status(errors.STATUS_BAD_REQUEST).send({ message: errors.ERR_VALIDATION });
+  }
+  return User.findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
         return res.status(errors.STATUS_CONFLICT).send({ message: errors.ERR_CONFLICT });
