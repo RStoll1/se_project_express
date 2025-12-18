@@ -3,17 +3,18 @@ const bcrypt = require('bcryptjs');
 const { JWT_SECRET } = require('../utils/config');
 const User = require('../models/user');
 const errors = require('../utils/errors');
+const { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } = require('../middlewares/error-handler');
 
 // POST /users
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
   if (!email) {
-    return res.status(errors.STATUS_BAD_REQUEST).send({ message: errors.ERR_VALIDATION });
+    return next(new BadRequestError(errors.ERR_VALIDATION));
   }
   return User.findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
-        return res.status(errors.STATUS_CONFLICT).send({ message: errors.ERR_CONFLICT });
+        return next(new ConflictError(errors.ERR_CONFLICT));
       }
       return bcrypt.hash(password, 10)
         .then((hash) => {
@@ -23,36 +24,57 @@ const createUser = (req, res) => {
               delete userObject.password;
               res.status(errors.STATUS_CREATED).send(userObject);
             })
-            .catch((err) => errors.handleError(res, err));
+            .catch((err) => {
+              if (err && err.name === 'ValidationError') {
+                return next(new BadRequestError(errors.ERR_VALIDATION));
+              }
+              if (err && err.code === 11000) {
+                return next(new ConflictError(errors.ERR_CONFLICT));
+              }
+              return next(err);
+            });
         })
-        .catch((err) => errors.handleError(res, err));
+        .catch((err) => next(err));
     })
-    .catch((err) => errors.handleError(res, err));
+    .catch((err) => next(err));
 };
 
 // GET /users/me
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => new Error(errors.ERR_USER_NOT_FOUND))
+    .orFail(() => new NotFoundError(errors.ERR_USER_NOT_FOUND))
     .then((user) => res.send(user))
-    .catch((err) => errors.handleError(res, err));
+    .catch((err) => {
+      if (err && err.name === 'CastError') {
+        return next(new BadRequestError(errors.ERR_VALIDATION));
+      }
+      return next(err);
+    });
 };
 
 // PATCH /users/me
-const updateCurrentUser = (req, res) => {
+const updateCurrentUser = (req, res, next) => {
   const { name, avatar } = req.body;
   return User.findByIdAndUpdate(req.user._id, { name, avatar }, { new: true, runValidators: true })
-    .orFail(() => new Error(errors.ERR_USER_NOT_FOUND))
+    .orFail(() => new NotFoundError(errors.ERR_USER_NOT_FOUND))
     .then((user) => res.send(user))
-    .catch((err) => errors.handleError(res, err));
+    .catch((err) => {
+      if (err && err.name === 'ValidationError') {
+        return next(new BadRequestError(errors.ERR_VALIDATION));
+      }
+      if (err && err.name === 'CastError') {
+        return next(new BadRequestError(errors.ERR_VALIDATION));
+      }
+      return next(err);
+    });
 };
 
 // POST /login
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(errors.STATUS_BAD_REQUEST).send({ message: errors.ERR_VALIDATION });
+    return next(new BadRequestError(errors.ERR_VALIDATION));
   }
 
   return User.findUserByCredentials(email, password)
@@ -61,7 +83,10 @@ const login = (req, res) => {
       res.send({ message: 'Login successful', token });
     })
     .catch((err) => {
-      errors.handleError(res, err);
+      if (err && (err.name === 'AuthError' || err.message === errors.ERR_AUTH)) {
+        return next(new UnauthorizedError(err.message || 'Invalid email or password'));
+      }
+      return next(err);
     });
 };
 
