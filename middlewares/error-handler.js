@@ -45,3 +45,11 @@ module.exports = {
   NotFoundError,
   ConflictError,
 };
+
+const { handleError } = require('../utils/errors');
+
+function errorHandler(err, req, res, next) {
+  return handleError(res, err);
+}
+
+module.exports.errorHandler = errorHandler;

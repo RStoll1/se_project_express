@@ -1,6 +1,6 @@
 const ClothingItem = require('../models/clothingItem')
 const errors = require('../utils/errors');
-const { BadRequestError, NotFoundError, ForbiddenError } = require('../middlewares/error-handler');
+const { BadRequestError, NotFoundError, ForbiddenError } = require('../middlewares/error-handler.js');
 
 const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
