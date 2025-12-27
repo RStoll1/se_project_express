@@ -1,35 +1,34 @@
-# WTWR (What to Wear?): Back End
+**Live Demo:**  
+[https://www.whattowearrs.crabdance.com](https://www.whattowearrs.crabdance.com)
 
-A REST API server for the WTWR (What to Wear?) application that manages clothing items and user data based on weather conditions.
+## Key Features
 
-## Project Overview
-
-This back-end server provides API endpoints for creating, reading, updating, and deleting clothing items, as well as managing user profiles. Users can like/unlike items and organize their wardrobe based on weather preferences.
-
-## Video Explanation
-
-You can watch a video walkthrough of the project here:  
-[WTWR Back End](https://drive.google.com/file/d/1QtN7lcorWACK5x0im1swLm_wWLbnUeJS/view?usp=sharing)
-
-The video covers:
-
-- How the API endpoints work
-- Authentication and authorization flow
-- Data structure and relationships
-- Example requests and responses
+- Real-time weather updates via OpenWeatherMap API
+- Weather-specific clothing suggestions
+- Modal form for adding new clothing items
+- Image preview modal for viewing clothing items
+- Component-based architecture using React
 
 ## Tech Stack
 
-- **Runtime**: Node.js with Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Code Quality**: ESLint with Airbnb style guide
-- **Development**: Nodemon for hot reloading
+- **React** (functional components + hooks)
+- **JavaScript (ES6+)**
+- **JSX**
+- **CSS3** (BEM methodology)
+- **HTML5**
+- **Node.js / npm** for package management
+- **GitHub Pages** for deployment
 
-## Features
+## Video Walkthrough
 
-- RESTful API for clothing items (CRUD operations)
-- User management endpoints
-- Like/unlike functionality for items
-- Item ownership and authorization
-- Centralized error handling
-- MongoDB data persistence
+Video explanation of the app and walkthrough below.
+
+[https://drive.google.com/file/d/1zVfOKxXKCplDKgAH-qQtOobqHAw3vpNP/view?usp=sharing](https://drive.google.com/file/d/1zVfOKxXKCplDKgAH-qQtOobqHAw3vpNP/view?usp=sharing)
+
+## Repositories
+
+- **Frontend Repository:**  
+  [https://github.com/RStoll1/se_project_react](https://github.com/RStoll1/se_project_react)
+
+- **Backend Repository:**  
+  [https://github.com/RStoll1/se_project_express](https://github.com/RStoll1/se_project_express)
