@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/RStoll1/se_project_express/issues"
   },
-  "homepage": "https://github.com/RStoll1/se_project_express#readme",
+  "homepage": "https://whattowearrs.crabdance.com/",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "celebrate": "^15.0.3",
