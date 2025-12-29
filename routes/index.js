@@ -7,6 +7,13 @@ const { getItems } = require('../controllers/clothingItem');
 
 // Public
 router.post('/signin', login);
+
+router.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Server will crash now');
+  }, 0);
+});
+
 router.post('/signup', createUser);
 router.get('/items', getItems);
 
