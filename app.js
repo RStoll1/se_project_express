@@ -17,11 +17,7 @@ mongoose
   .then(() => {
     console.log("Connected to DB");
   })
-  .catch((err) => {
-    console.error("Failed to connect to MongoDB:", err.message);
-    console.error("Please ensure MongoDB is running: sudo systemctl start mongod");
-    process.exit(1);
-  });
+  .catch(console.error);
 
 app.use(express.json());
 app.use(cors());
