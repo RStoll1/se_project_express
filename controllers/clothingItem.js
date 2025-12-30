@@ -1,6 +1,10 @@
-const ClothingItem = require('../models/clothingItem')
-const errors = require('../utils/errors');
-const { BadRequestError, NotFoundError, ForbiddenError } = require('../middlewares/error-handler.js');
+const ClothingItem = require("../models/clothingItem");
+const errors = require("../utils/errors");
+const {
+  BadRequestError,
+  NotFoundError,
+  ForbiddenError,
+} = require("../middlewares/error-handler");
 
 const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
@@ -8,7 +12,7 @@ const createItem = (req, res, next) => {
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => res.status(errors.STATUS_CREATED).send(item))
     .catch((err) => {
-      if (err && err.name === 'ValidationError') {
+      if (err && err.name === "ValidationError") {
         return next(new BadRequestError(errors.ERR_VALIDATION));
       }
       return next(err);
@@ -16,8 +20,8 @@ const createItem = (req, res, next) => {
 };
 
 const getItems = (req, res, next) => {
-  ClothingItem.find({}).then((items) =>
-    res.send(items))
+  ClothingItem.find({})
+    .then((items) => res.send(items))
     .catch((err) => next(err));
 };
 
@@ -27,11 +31,12 @@ const likeItem = (req, res, next) => {
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $addToSet: { likes: req.user._id } },
-    { new: true },
-  ).orFail(() => new NotFoundError(errors.ERR_NOT_FOUND))
+    { new: true }
+  )
+    .orFail(() => new NotFoundError(errors.ERR_NOT_FOUND))
     .then((item) => res.send(item))
     .catch((err) => {
-      if (err && err.name === 'CastError') {
+      if (err && err.name === "CastError") {
         return next(new BadRequestError(errors.ERR_VALIDATION));
       }
       return next(err);
@@ -44,11 +49,12 @@ const dislikeItem = (req, res, next) => {
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $pull: { likes: req.user._id } },
-    { new: true },
-  ).orFail(() => new NotFoundError(errors.ERR_NOT_FOUND))
+    { new: true }
+  )
+    .orFail(() => new NotFoundError(errors.ERR_NOT_FOUND))
     .then((item) => res.send(item))
     .catch((err) => {
-      if (err && err.name === 'CastError') {
+      if (err && err.name === "CastError") {
         return next(new BadRequestError(errors.ERR_VALIDATION));
       }
       return next(err);
@@ -71,14 +77,14 @@ const deleteItem = (req, res, next) => {
           return next(new ForbiddenError(errors.ERR_NOT_AUTHORIZED));
         })
         .catch((err) => {
-          if (err && err.name === 'CastError') {
+          if (err && err.name === "CastError") {
             return next(new BadRequestError(errors.ERR_VALIDATION));
           }
           return next(err);
         });
     })
     .catch((err) => {
-      if (err && err.name === 'CastError') {
+      if (err && err.name === "CastError") {
         return next(new BadRequestError(errors.ERR_VALIDATION));
       }
       return next(err);
@@ -90,5 +96,5 @@ module.exports = {
   getItems,
   likeItem,
   dislikeItem,
-  deleteItem
+  deleteItem,
 };

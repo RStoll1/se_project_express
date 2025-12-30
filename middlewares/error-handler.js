@@ -1,7 +1,8 @@
+/* eslint-disable max-classes-per-file */
 class BadRequestError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'BadRequestError';
+    this.name = "BadRequestError";
     this.statusCode = 400;
   }
 }
@@ -9,7 +10,7 @@ class BadRequestError extends Error {
 class UnauthorizedError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'UnauthorizedError';
+    this.name = "UnauthorizedError";
     this.statusCode = 401;
   }
 }
@@ -17,7 +18,7 @@ class UnauthorizedError extends Error {
 class ForbiddenError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'ForbiddenError';
+    this.name = "ForbiddenError";
     this.statusCode = 403;
   }
 }
@@ -25,7 +26,7 @@ class ForbiddenError extends Error {
 class NotFoundError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'NotFoundError';
+    this.name = "NotFoundError";
     this.statusCode = 404;
   }
 }
@@ -33,7 +34,7 @@ class NotFoundError extends Error {
 class ConflictError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'ConflictError';
+    this.name = "ConflictError";
     this.statusCode = 409;
   }
 }
@@ -46,9 +47,12 @@ module.exports = {
   ConflictError,
 };
 
-const { handleError } = require('../utils/errors');
+const { handleError } = require("../utils/errors");
 
 function errorHandler(err, req, res, next) {
+  if (err.statusCode) {
+    return res.status(err.statusCode).send({ message: err.message });
+  }
   return handleError(res, err);
 }
 
